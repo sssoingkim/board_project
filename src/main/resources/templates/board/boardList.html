@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>BOARD</title>
+</head>
+<body>
+    <form id="writeBT" action="#" th:action="@{/board/form}" method="get">
+        <input type="button" onclick="writeButton()" value="글쓰기"/>
+    </form>
+
+    <table border="1" style="width:600px">
+        <caption>게시판</caption>
+        <colgroup>
+            <col width="8%"/>
+            <col width="*%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+        </colgroup>
+        <thread>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>등록자</th>
+                <th>등록일</th>
+            </tr>
+        </thread>
+
+        <tbody>
+            <!--/*@thymesVar id="listview" type="java.util.List<com.board.DTO.BoardDTO>"*/-->
+            <th:block th:each="boardPost: ${listview}">
+                <tr>
+                    <td th:text="${boardPost.brdno}"></td>
+                    <td><a th:href="@{/board/read(idx=${boardPost.brdno})}" th:text="${boardPost.brdtitle}"></a></td>
+                    <td th:text="${boardPost.brdwriter}"></td>
+                    <td th:text="${boardPost.brddate}"></td>
+                </tr>
+            </th:block>
+        </tbody>
+    </table>
+</body>
+
+<script th:inline="javascript">
+    function writeButton()
+    {
+        $('#writeBT').submit();
+    }
+</script>
+</html>
