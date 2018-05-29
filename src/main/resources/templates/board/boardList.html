@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8"/>
     <title>BOARD</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <body>
-    <form id="writeBT" action="#" th:action="@{/board/form}" method="get">
+
+    <form class="writeBT" action="#" th:action="@{/postForm}" method="get">
         <input type="button" onclick="writeButton()" value="글쓰기"/>
     </form>
 
@@ -15,35 +17,50 @@
             <col width="8%"/>
             <col width="*%"/>
             <col width="15%"/>
-            <col width="15%"/>
+            <col width="20%"/>
+            <col width="10%"/>
         </colgroup>
-        <thread>
+        <thead>
             <tr>
                 <th>번호</th>
                 <th>제목</th>
                 <th>등록자</th>
                 <th>등록일</th>
+                <th>조회수</th>
             </tr>
-        </thread>
+        </thead>
 
         <tbody>
             <!--/*@thymesVar id="listview" type="java.util.List<com.board.DTO.BoardDTO>"*/-->
             <th:block th:each="boardPost: ${listview}">
                 <tr>
                     <td th:text="${boardPost.brdno}"></td>
-                    <td><a th:href="@{/board/read(idx=${boardPost.brdno})}" th:text="${boardPost.brdtitle}"></a></td>
+                    <td><a th:href="@{/postRead(idx=${boardPost.brdno})}" th:text="${boardPost.brdtitle}"></a></td>
                     <td th:text="${boardPost.brdwriter}"></td>
                     <td th:text="${boardPost.brddate}"></td>
+                    <td th:text="${boardPost.brdhit}"></td>
                 </tr>
             </th:block>
         </tbody>
     </table>
+
+<th:block th:if="${pagingDTO.totalPages} > 1">
+    <div class="paging">
+        <th:block th:each="i: ${#numbers.sequence(pagingDTO.pageStart, pagingDTO.pageEnd)}")>
+            <form action="#" th:action="@{/boardList}" th:object="${pagingDTO}" method="get">
+                <input type="hidden" th:name="pageIdx" th:attr="value=${i}"/>
+                <input type="submit" th:value="${i}"/>
+            </form>
+        </th:block>
+    </div>
+</th:block>
+
 </body>
 
 <script th:inline="javascript">
     function writeButton()
     {
-        $('#writeBT').submit();
+        $('.writeBT').submit();
     }
 </script>
 </html>

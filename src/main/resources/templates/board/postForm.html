@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+
+    <!--/*@thymesVar id="boardDTO" type="com.board.DTO.BoardDTO"*/-->
+    <form class="boardForm" action="#" th:action="@{/postSave}" th:object="${boardDTO}" method="post">
+        <table border="1" style="width:600px">
+            <caption>게시판</caption>
+            <colgroup>
+                <col width="15%" />
+                <col width="*%" />
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td>작성자</td>
+                    <td><input type="text" id="writerInput" th:field="*{brdwriter}" size="20" maxlength="20"/></td>
+                </tr>
+                <tr>
+                    <td>제목</td>
+                    <td><input type="text" id="titleInput" th:field="*{brdtitle}" size="70" maxlength="250"/></td>
+                </tr>
+                <tr>
+                    <td>내용</td>
+                    <td><textarea  id="memoInput" th:field="*{brdmemo}" rows="5" cols="60"></textarea></td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="button" onclick="saveFunction()" value="저장"/>
+    </form>
+
+    <form class="backBT" action="#" th:action="@{/boardList}" method="get">
+        <input type="button" onclick="backButton()" value="뒤로가기"/>
+    </form>
+
+</body>
+
+<script th:inline="javascript">
+    function saveFunction(){
+        //jquery로 내용 검사
+        $('.boardForm').submit();
+    }
+
+    function backButton(){
+        $('.backBT').submit();
+    }
+</script>
+
+</html>

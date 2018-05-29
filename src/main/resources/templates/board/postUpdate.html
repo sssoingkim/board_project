@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>게시글수정</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    <!--/*@thymesVar id="boardDTO" type="com.board.DTO.BoardDTO"*/-->
+    <form class="boardUpdateForm" action="#" th:action="@{/postUpdateSave}" th:object="${boardDTO}" method="post">
+        <input type="hidden" name="_method" value="put"/>
+        <table border="1" style="width:600px">
+            <caption>게시판</caption>
+            <colgroup>
+                <col width="15%"/>
+                <col width="*%"/>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td>작성자</td>
+                    <td><input type="text" id="writerInput" th:field="*{brdwriter}" size="20" maxlength="20" th:attr="value=*{brdwriter}"/></td>
+                </tr>
+                <tr>
+                    <td>제목</td>
+                    <td><input type="text" id="titleInput" th:field="*{brdtitle}" sizd="70" maxlength="250" th:attr="value=*{brdtitle}"/></td>
+                </tr>
+                <tr>
+                    <td>내용</td>
+                    <td><textarea id="memoInput" th:field="*{brdmemo}" rows="5" cols="60" th:attr="value=*{brdmemo}"></textarea></td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="hidden" th:field="*{brdno}" th:attr="value=*{brdno}"/>
+        <input type="button" onclick="saveFunction()" value="변경내용 저장"/>
+    </form>
+</body>
+
+<script th:inline="javascript">
+    function saveFunction(){
+        //jquery로 내용 검사
+        $('.boardUpdateForm').submit();
+    }
+</script>
+</html>

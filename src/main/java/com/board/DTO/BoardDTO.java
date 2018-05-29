@@ -1,13 +1,30 @@
 package com.board.DTO;
 
 public class BoardDTO {
-    private String brdno, brdtitle, brdwriter, brdmemo, brddate;
+    private int brdno, brdhit;
+    private String brdtitle, brdwriter, brdmemo, brddate, brddeleteflag;
 
-    public String getBrdno() {
+    public int getBrdhit() {
+        return brdhit;
+    }
+
+    public void setBrdhit(int brdhit) {
+        this.brdhit = brdhit;
+    }
+
+    public String getBrddeleteflag() {
+        return brddeleteflag;
+    }
+
+    public void setBrddeleteflag(String brddeleteflag) {
+        this.brddeleteflag = brddeleteflag;
+    }
+
+    public int getBrdno() {
         return brdno;
     }
 
-    public void setBrdno(String brdno) {
+    public void setBrdno(int brdno) {
         this.brdno = brdno;
     }
 
