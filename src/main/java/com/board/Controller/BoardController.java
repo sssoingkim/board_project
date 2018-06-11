@@ -2,6 +2,7 @@ package com.board.Controller;
 
 import com.board.DTO.BoardDTO;
 import com.board.DTO.PagingDTO;
+import com.board.DTO.ReplyDTO;
 import com.board.Service.BoardSvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,9 @@ public class BoardController {
 
     @RequestMapping(value="/postForm")
     public String postForm(Model model) throws Exception{
+
         model.addAttribute("boardDTO", new BoardDTO());
+
 
         return "board/postForm";
     }
@@ -49,8 +52,11 @@ public class BoardController {
     public String postRead(Model model, @RequestParam("idx") int idx) throws Exception{
         BoardDTO boardDTO = boardSvc.getPost(idx);
         boardSvc.updateBoardRead(boardDTO);
+        List<?> replylist = boardSvc.selectReplyList(idx);
 
         model.addAttribute("boardDTO", boardDTO);
+        model.addAttribute("replyDTO", new ReplyDTO());
+        model.addAttribute("replylist", replylist);
 
         return "board/postRead";
     }
@@ -71,4 +77,19 @@ public class BoardController {
         return "redirect:/boardList";
     }
 
+    @RequestMapping(value="/postDelete", method=RequestMethod.GET)
+    public String postDelete(@ModelAttribute BoardDTO boardDTO) throws Exception {
+        //System.out.println(boardDTO.getBrdno());
+
+        boardSvc.postDelete(boardDTO);
+
+        return "redirect:/boardList";
+    }
+
+    @RequestMapping(value="/replySave", method=RequestMethod.POST)
+    public String replySave(@ModelAttribute ReplyDTO replyDTO) throws Exception {
+        boardSvc.insertReply(replyDTO);
+        System.out.println(replyDTO.getBrd_idx());
+        return "redirect:/postRead?idx=" + replyDTO.getBrd_idx();
+    }
 }

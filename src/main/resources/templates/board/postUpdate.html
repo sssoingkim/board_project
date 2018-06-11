@@ -7,7 +7,7 @@
 </head>
 <body>
     <!--/*@thymesVar id="boardDTO" type="com.board.DTO.BoardDTO"*/-->
-    <form class="boardUpdateForm" action="#" th:action="@{/postUpdateSave}" th:object="${boardDTO}" method="post">
+    <form id="boardUpdateForm" action="#" th:action="@{/postUpdateSave}" th:object="${boardDTO}" method="post">
         <input type="hidden" name="_method" value="put"/>
         <table border="1" style="width:600px">
             <caption>게시판</caption>
@@ -33,12 +33,20 @@
         <input type="hidden" th:field="*{brdno}" th:attr="value=*{brdno}"/>
         <input type="button" onclick="saveFunction()" value="변경내용 저장"/>
     </form>
+
+    <form id="backBT" action="#" th:action="@{/boardList}" method="get">
+        <input type="button" onclick="backButton()" value="뒤로가기"/>
+    </form>
 </body>
 
 <script th:inline="javascript">
     function saveFunction(){
         //jquery로 내용 검사
-        $('.boardUpdateForm').submit();
+        $('#boardUpdateForm').submit();
+    }
+
+    function backButton() {
+        $('#backBT').submit();
     }
 </script>
 </html>

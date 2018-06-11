@@ -6,7 +6,8 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <body>
-
+    <!--/*@thymesVar id="boardDTO" type="com.board.DTO.BoardDTO"*/-->
+    <!--/*@thymesVar id="replyDTO" type="com.board.DTO.ReplyDTO"*/-->
     <table border="1" style="width:600px" th:object="${boardDTO}">
         <caption>게시판</caption>
         <colgroup>
@@ -32,10 +33,26 @@
 <form id="backBT" action="#" th:action="@{/boardList}" method="get">
     <input type="button" onclick="backButton()" value="뒤로가기"/>
 </form>
-    <!--/*@thymesVar id="boardDTO" type="com.board.DTO.BoardDTO"*/-->
+
 <form id="updateBT" action="#" th:object="${boardDTO}" th:action="@{'/postUpdate/' + ${boardDTO.brdno}}" th:method="get">
     <input type="button" onclick="updateButton()" value="수정"/>
 </form>
+
+<form id="deleteBT" action="#" th:object="${boardDTO}" th:action="@{/postDelete}" th:method="get">
+    <input type="hidden" th:name="brdno" th:attr="value=*{brdno}"/>
+    <input type="button" onclick="deleteButton()" value="삭제"/>
+</form>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<div style="border:1px solid; width:600px; padding:5px;">
+    <form class="replyForm" action="#" th:action="@{/replySave}" th:object="${replyDTO}" method="post">
+        <input type="hidden" th:name="brd_idx" th:attr="value=${boardDTO.brdno}"/>
+        작성자 : <input type="text" class="rewriterInput" th:field="*{rewriter}" size="20" maxlength="20"/> <br/>
+        <textarea class="rememoInput" th:field="*{rememo}" rows="3" cols="60" maxlength="500" placeholder="댓글을 달아주세요."></textarea>
+        <input type="button" onclick="replySaveFunction()" value="저장"/>
+    </form>
+</div>
 
 </body>
 
@@ -47,6 +64,14 @@
 
     function updateButton() {
         $('#updateBT').submit();
+    }
+
+    function deleteButton() {
+        $('#deleteBT').submit();
+    }
+
+    function replySaveFunction() {
+        $('.replyForm').submit();
     }
 
 </script>

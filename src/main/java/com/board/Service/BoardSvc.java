@@ -1,7 +1,6 @@
 package com.board.Service;
 
-import com.board.DTO.BoardDTO;
-import com.board.DTO.PagingDTO;
+import com.board.DTO.*;
 import com.board.Mapper.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,24 @@ public class BoardSvc {
         boardMapper.updateBoardRead(param.getBrdno());
     }
 
+    public void postDelete(BoardDTO param) throws Exception {
+        boardMapper.deleteBoard(param.getBrdno());
+    }
+
     public Integer selectBoardCount()  throws Exception {
         return boardMapper.selectBoardCount();
     }
+
+    public void insertReply(ReplyDTO param) throws Exception {
+        boardMapper.insertReply(param.getBrd_idx(), param.getRewriter(), param.getRememo());
+     }
+
+//     public void updateReply(ReplyDTO param) throws Exception {
+//         boardMapper.updateReply();
+//     }
+
+    public List<?> selectReplyList(int idx) throws Exception {
+        return boardMapper.selectReplyList(idx);
+    }
+
 }
