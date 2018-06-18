@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -24,9 +25,15 @@ public class BoardController {
         pagingDTO.setPageCurrent(pageIdx);
         pagingDTO.pageCalculate(boardSvc.selectBoardCount());
 
-        List<?> listview = boardSvc.selectBoardList(pagingDTO);
+        List<BoardDTO> listview = boardSvc.selectBoardList(pagingDTO);
+        List<Integer> countList = new ArrayList<Integer>();
+        for(BoardDTO boardDTO : listview) {
+            int reply_count = boardSvc.selectReplyCount(boardDTO.getBrdno());
+            countList.add(reply_count);
+        }
 
         model.addAttribute("listview",listview);
+        model.addAttribute("countList", countList);
         model.addAttribute("pagingDTO", pagingDTO);
 
         return "board/boardList";
@@ -89,7 +96,25 @@ public class BoardController {
     @RequestMapping(value="/replySave", method=RequestMethod.POST)
     public String replySave(@ModelAttribute ReplyDTO replyDTO) throws Exception {
         boardSvc.insertReply(replyDTO);
-        System.out.println(replyDTO.getBrd_idx());
-        return "redirect:/postRead?idx=" + replyDTO.getBrd_idx();
+
+        return "redirect:/postRead?idx=" + replyDTO.getBrdno();
     }
+
+    @RequestMapping(value="/replyDelete", method=RequestMethod.DELETE)
+    public String replyDelete(@RequestParam(value="brdno")int brdno,
+                               @RequestParam(value="idx")int idx) throws Exception {
+        boardSvc.replyDelete(idx);
+
+        return "redirect:/postRead?idx=" + brdno;
+    }
+
+    @RequestMapping(value="/replyUpdateSave", method=RequestMethod.PUT)
+    public String replyUpdateSave(@ModelAttribute ReplyDTO replyDTO) throws Exception{
+        boardSvc.updateReply(replyDTO);
+
+        System.out.println(replyDTO.getBrdno() + ", " + replyDTO.getReno() + ", " + replyDTO.getRememo());
+
+        return "redirect:/postRead?idx=" + replyDTO.getBrdno();
+    }
+
 }

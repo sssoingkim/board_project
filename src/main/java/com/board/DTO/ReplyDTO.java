@@ -1,15 +1,15 @@
 package com.board.DTO;
 
 public class ReplyDTO {
-    private int brd_idx, reno;
+    private int brdno, reno;
     private String rewriter, redeleteflag, rememo, redate;
 
-    public int getBrd_idx() {
-        return brd_idx;
+    public int getBrdno() {
+        return brdno;
     }
 
-    public void setBrd_idx(int brd_idx) {
-        this.brd_idx = brd_idx;
+    public void setBrdno(int brdno) {
+        this.brdno = brdno;
     }
 
     public int getReno() {

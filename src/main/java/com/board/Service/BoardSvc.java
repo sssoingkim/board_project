@@ -13,7 +13,7 @@ public class BoardSvc {
     @Autowired
     private BoardMapper boardMapper;
 
-    public List<?> selectBoardList(PagingDTO pagingDTO) throws Exception{
+    public List<BoardDTO> selectBoardList(PagingDTO pagingDTO) throws Exception{
         return boardMapper.selectBoardList(pagingDTO.getRowStart());
     }
 
@@ -42,7 +42,7 @@ public class BoardSvc {
     }
 
     public void insertReply(ReplyDTO param) throws Exception {
-        boardMapper.insertReply(param.getBrd_idx(), param.getRewriter(), param.getRememo());
+        boardMapper.insertReply(param.getBrdno(), param.getRewriter(), param.getRememo());
      }
 
 //     public void updateReply(ReplyDTO param) throws Exception {
@@ -51,6 +51,18 @@ public class BoardSvc {
 
     public List<?> selectReplyList(int idx) throws Exception {
         return boardMapper.selectReplyList(idx);
+    }
+
+    public Integer selectReplyCount(int brd_idx)  throws Exception {
+        return boardMapper.selectReplyCount(brd_idx);
+    }
+
+    public void replyDelete(int idx) throws Exception {
+        boardMapper.deleteReply(idx);
+    }
+
+    public void updateReply(ReplyDTO param) throws Exception {
+        boardMapper.updateReply(param.getReno(), param.getRewriter(), param.getRememo());
     }
 
 }

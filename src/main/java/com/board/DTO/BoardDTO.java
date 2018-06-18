@@ -1,8 +1,17 @@
 package com.board.DTO;
 
 public class BoardDTO {
-    private int brdno, brdhit;
+    private int brdno, brdhit, brdre;
     private String brdtitle, brdwriter, brdmemo, brddate, brddeleteflag;
+
+    public int getBrdre() {
+        return brdre;
+    }
+
+    public void setBrdre(int brdre) {
+        this.brdre = brdre;
+    }
+
 
     public int getBrdhit() {
         return brdhit;

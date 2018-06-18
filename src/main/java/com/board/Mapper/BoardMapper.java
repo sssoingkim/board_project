@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface BoardMapper {
-    @Select("SELECT BRDNO, BRDTITLE, BRDWRITER, DATE_FORMAT(BRDDATE, '%Y-%m-%d') AS BRDDATE, BRDHIT FROM TB_BOARD WHERE BRDDELETEFLAG='N' ORDER BY BRDNO DESC LIMIT ${rowStart-1},5")
+    @Select("SELECT BRDNO, BRDTITLE, BRDWRITER, DATE_FORMAT(BRDDATE, '%Y-%m-%d') AS BRDDATE, BRDHIT, BRDRE FROM TB_BOARD WHERE BRDDELETEFLAG='N' ORDER BY BRDNO DESC LIMIT ${rowStart-1},5")
     List<BoardDTO> selectBoardList(@Param("rowStart") int rowStart);
 
     @Insert("INSERT INTO TB_BOARD (BRDTITLE, BRDWRITER, BRDMEMO) VALUES (#{brdtitle}, #{brdwriter}, #{brdmemo})")
@@ -35,10 +35,9 @@ public interface BoardMapper {
     Integer selectBoardCount();
 
     //댓글
-
     @Insert("INSERT INTO TB_BOARDREPLY(BRDNO, REWRITER, REMEMO) VALUES (#{brdno}, #{rewriter}, #{rememo})")
     void insertReply(@Param("brdno") int brdno,
-                    @Param("rewriter") String rewriter,
+                     @Param("rewriter") String rewriter,
                      @Param("rememo") String rememo);
 
 //    @Update("UPDATE TB_BOARDREPLY SET REWRITER=#{rewriter}, REMEMO=#{rememo} WHERE RENO=#{idx}")
@@ -46,6 +45,18 @@ public interface BoardMapper {
 //                    @Param("rememo") String rememo,
 //                    @Param("idx") int idx);
 
-    @Select("SELECT BRDNO, REWRITER, REMEMO, DATE_FORMAT(REDATE, '%Y/%m/%d %h:%i') AS REDATE FROM TB_BOARDREPLY WHERE BRDNO=#{idx} AND REDELETEFLAG='N' ORDER BY RENO DESC")
+    @Select("SELECT BRDNO, RENO, REWRITER, REMEMO, DATE_FORMAT(REDATE, '%Y/%m/%d %h:%i') AS REDATE FROM TB_BOARDREPLY WHERE BRDNO=#{idx} AND REDELETEFLAG='N' ORDER BY RENO DESC")
     List<ReplyDTO> selectReplyList(@Param("idx") int idx);
+
+    @Select("SELECT COUNT(*) FROM TB_BOARDREPLY WHERE REDELETEFLAG='N' AND BRDNO=#{idx}")
+    Integer selectReplyCount(@Param("idx")int idx);
+
+    @Update("UPDATE TB_BOARDREPLY SET REDELETEFLAG='Y' WHERE RENO=#{idx}")
+    void deleteReply(@Param("idx") int idx);
+
+    @Update("UPDATE TB_BOARDREPLY SET REMEMO=#{rememo} WHERE REDELETEFLAG='N' AND RENO=#{idx}")
+    void updateReply(@Param("idx") int idx,
+                     @Param("rewriter") String rewriter,
+                     @Param("rememo") String rememo);
+
 }

@@ -43,14 +43,40 @@
     <input type="button" onclick="deleteButton()" value="삭제"/>
 </form>
 <p>&nbsp;</p>
-<p>&nbsp;</p>
 
 <div style="border:1px solid; width:600px; padding:5px;">
     <form class="replyForm" action="#" th:action="@{/replySave}" th:object="${replyDTO}" method="post">
-        <input type="hidden" th:name="brd_idx" th:attr="value=${boardDTO.brdno}"/>
+        <input type="hidden" th:name="brdno" th:attr="value=${boardDTO.brdno}"/>
         작성자 : <input type="text" class="rewriterInput" th:field="*{rewriter}" size="20" maxlength="20"/> <br/>
         <textarea class="rememoInput" th:field="*{rememo}" rows="3" cols="60" maxlength="500" placeholder="댓글을 달아주세요."></textarea>
         <input type="button" onclick="replySaveFunction()" value="저장"/>
+    </form>
+</div>
+
+<!--/*@thymesVar id="replylist" type="java.util.List<com.board.DTO.ReplyDTO>"*/-->
+ <th:block th:each="replyList,iter: ${replylist}">
+     <div th:id="|reply${iter.index}|" style="border:1px solid grey; width:600px; padding:5px; margin-top:5px;">
+         <th:block th:text="${replyList.rewriter}"></th:block>
+         <th:block th:text="${replyList.redate}"></th:block>
+         <form th:id="|reDeleteBT${iter.index}|" action="#" th:action="@{/replyDelete}" th:method="post">
+             <input type="hidden" name="_method" value="delete"/>
+             <input type="hidden" th:name="brdno" th:attr="value=${replyList.brdno}"/>
+             <input type="hidden" th:name="idx" th:attr="value=${replyList.reno}"/>
+             <input type="button" th:onclick="|replyDeleteFunction(${iter.index})|" value="삭제"/>
+         </form>
+         <input type="button" th:onclick="|replyUpdateFunction('${replyList.rememo}', ${iter.index}); replyId(${replyList.reno});|" value="수정"/>
+         <br/> <th:block th:text="${replyList.rememo}"></th:block>
+     </div>
+ </th:block>
+
+<div id="replyDiv" style="width:99%; display:none">
+    <form class="replyUpdateForm" action="#" th:action="@{/replyUpdateSave}" th:object="${replyDTO}" method="post">
+        <input type="hidden" name="_method" value="put"/>
+        <input type="hidden" th:name="brdno" th:attr="value=${boardDTO.brdno}"/>
+        <input type="hidden" id="divReno" th:name="reno" />
+        <textarea id="replyDivTextarea" th:name="rememo" th:attr="value=*{rememo}" rows="3" cols="60" maxlength="500"></textarea>
+        <input type="button" onclick="replyUpdateSave()" value="저장"/>
+        <input type="button" onclick="replyUpdateCancle()" value="취소"/>
     </form>
 </div>
 
@@ -72,6 +98,36 @@
 
     function replySaveFunction() {
         $('.replyForm').submit();
+    }
+
+    function replyDeleteFunction(replyIdx){
+        var deleteForm = document.getElementById("reDeleteBT" + replyIdx);
+        deleteForm.submit();
+    }
+
+    function replyUpdateFunction(replyMemo, replyIdx){
+        var targetReplyDiv = document.getElementById("reply" + replyIdx);
+        var replyDiv = document.getElementById("replyDiv");
+        var targetReplyMemo = document.getElementById("replyDivTextarea");
+
+        targetReplyMemo.value = replyMemo;
+
+        replyDiv.style.display = "";
+        targetReplyDiv.appendChild(replyDiv);
+
+    }
+
+    function replyId(replyIdx){
+        $('#divReno').attr('value', replyIdx);
+    }
+
+    function replyUpdateSave(){
+        $('.replyUpdateForm').submit();
+    }
+
+    function replyUpdateCancle(){
+        var dis = document.getElementById("replyDiv");
+        dis.style.display = 'none';
     }
 
 </script>

@@ -32,10 +32,11 @@
 
         <tbody>
             <!--/*@thymesVar id="listview" type="java.util.List<com.board.DTO.BoardDTO>"*/-->
-            <th:block th:each="boardPost: ${listview}">
+            <!--/*@thymesVar id="countList" type="java.util.List<java.lang.Integer>"*/-->
+            <th:block th:each="boardPost, iter: ${listview}">
                 <tr>
                     <td th:text="${boardPost.brdno}"></td>
-                    <td><a th:href="@{/postRead(idx=${boardPost.brdno})}" th:text="${boardPost.brdtitle}"></a></td>
+                    <td><a th:href="@{/postRead(idx=${boardPost.brdno})}" th:text="${boardPost.brdtitle}"></a> <th:block th:text="${countList.get(iter.index)}"></th:block></td>
                     <td th:text="${boardPost.brdwriter}"></td>
                     <td th:text="${boardPost.brddate}"></td>
                     <td th:text="${boardPost.brdhit}"></td>
